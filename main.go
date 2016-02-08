@@ -29,7 +29,7 @@ func parseGpx(basePath string, file os.FileInfo){
 		log.Fatal(err)
 	}
 
-	gpx.ConvertToGeoJson(parsed)
+	//gpx.ConvertToGeoJson(parsed)
 
 	fmt.Println(len(parsed.Trk.Trkseg[0].Trkpt))
 }

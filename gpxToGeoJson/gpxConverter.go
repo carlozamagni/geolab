@@ -23,7 +23,7 @@ func ConvertToGeoJson(gpxStructure Gpx) (bool, error){
 	for i, point := range gpxStructure.Trk.Trkseg[0].Trkpt{
 		//fmt.Printf("%f - %f \n", point.Lat, point.Lon)
 		fmt.Print(i)
-		
+
 		coordinates[i] = [3]float32{
 			point.Lon,
 			point.Lat,
