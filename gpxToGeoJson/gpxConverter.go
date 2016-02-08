@@ -11,10 +11,10 @@ import(
 // maybe using this:  http://kpawlik.github.io/geojson/
 func ConvertToGeoJson(gpxStructure Gpx) (bool, error){
 
-	if(len(gpxStructure.Trk.Trkseg) < 1){
-		return true, nil
-	}
-	if(len(gpxStructure.Trk.Trkseg[0].Trkpt) < 1){
+	segments := len(gpxStructure.Trk.Trkseg)
+	points := len(gpxStructure.Trk.Trkseg[0].Trkpt)
+
+	if(segments < 1 || points < 1){
 		return true, nil
 	}
 
@@ -24,11 +24,11 @@ func ConvertToGeoJson(gpxStructure Gpx) (bool, error){
 		//fmt.Printf("%f - %f \n", point.Lat, point.Lon)
 		fmt.Print(i)
 
-		coordinates[i] = [3]float32{
+		coordinates = append(coordinates, [3]float32{
 			point.Lon,
 			point.Lat,
 			point.Ele,
-		}
+		})
 	}
 
 	return true, nil
