@@ -60,7 +60,7 @@ func main() {
 		// read GPX
 		if(strings.HasSuffix(strings.ToLower(file.Name()), ".gpx")){
 			fmt.Println(file.Name())
-			parseGpx(basePath, file);
+			go parseGpx(basePath, file);
 		}
 	}
 
