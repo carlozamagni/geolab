@@ -45,8 +45,8 @@ an array of LineString coordinate arrays.
 type MultiLineString struct {
 	Type string 		`json:"type"`
 	Coordinates []struct {
-		Num0 []float64	`json:"0"`
-		Num1 []float64	`json:"1"`
+		Lon []float64	`json:"0"`
+		Lat []float64	`json:"1"`
 	} 			`json:"coordinates"`
 }
 
