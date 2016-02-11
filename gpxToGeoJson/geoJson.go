@@ -11,3 +11,5 @@ func New() *LineString{
 		Type: "LineString",
 	}
 }
+
+// re define using: http://mholt.github.io/json-to-go/
