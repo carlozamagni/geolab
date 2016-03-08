@@ -6,7 +6,6 @@ import (
 )
 
 type LineString struct{
-	Name string		`json:"name"`
 	Type string 		`json:"type"`
 	Coordinates [][]float32 `json:"coordinates"`
 }

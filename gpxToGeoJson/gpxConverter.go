@@ -35,9 +35,9 @@ func ConvertToGeoJson(gpxStructure Gpx) (bool, error){
 	return true, nil
 }
 
-func CreateLineString(name string, gpxStructure Gpx) (geojson.LineString, error){
+func CreateLineString(gpxStructure Gpx) (geojson.LineString, error){
 
-	resultingLine := geojson.LineString{Name: name, Type:"LineString"}
+	resultingLine := geojson.LineString{Type:"LineString"}
 
 	segments := len(gpxStructure.Trk.Trkseg)
 	points := len(gpxStructure.Trk.Trkseg[0].Trkpt)

@@ -10,9 +10,15 @@ import (
 	"io/ioutil"
 
 	db "github.com/carlozamagni/geolab/storage"
+	geojson "github.com/carlozamagni/geolab/geojson"
 	gpx "github.com/carlozamagni/geolab/gpxToGeoJson"
 	//"encoding/json"
 )
+
+type GeoTrack struct{
+	Name string			`json:"name"`
+	Path geojson.LineString		`json:"path"`
+}
 
 func parseGpx(basePath string, file os.FileInfo, wg *sync.WaitGroup) {
 
@@ -38,16 +44,19 @@ func parseGpx(basePath string, file os.FileInfo, wg *sync.WaitGroup) {
 	//fmt.Println(len(parsed.Trk.Trkseg[0].Trkpt))
 
 	trackName := strings.Split(strings.ToLower(file.Name()), ".gpx")[0]
-	lineString, err := gpx.CreateLineString(trackName, parsed)
+	lineString, err := gpx.CreateLineString(parsed)
 
 	if err == nil {
 		/*
 		lineStringAsJson, _ := json.Marshal(lineString)
 		fmt.Println(string(lineStringAsJson))
 		*/
+
+		geoTrack := GeoTrack{Name:trackName, Path:lineString}
+
 		mongo := db.MongoSession("local")
 		geoDataCollection := mongo.DB("geolab").C("paths")
-		geoDataCollection.Insert(lineString)
+		geoDataCollection.Insert(geoTrack)
 	}
 
 	wg.Done()
