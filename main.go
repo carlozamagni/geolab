@@ -12,7 +12,6 @@ import (
 	db "github.com/carlozamagni/geolab/storage"
 	geojson "github.com/carlozamagni/geolab/geojson"
 	gpx "github.com/carlozamagni/geolab/gpxToGeoJson"
-	//"encoding/json"
 )
 
 type GeoTrack struct{
