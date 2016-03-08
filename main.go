@@ -15,6 +15,7 @@ import (
 )
 
 func parseGpx(basePath string, file os.FileInfo, wg *sync.WaitGroup) {
+
 	fullFileName := strings.Join([]string{basePath, file.Name()}, "/")
 
 	if(! strings.HasSuffix(strings.ToLower(file.Name()), ".gpx")){
@@ -36,7 +37,8 @@ func parseGpx(basePath string, file os.FileInfo, wg *sync.WaitGroup) {
 	//gpx.ConvertToGeoJson(parsed)
 	//fmt.Println(len(parsed.Trk.Trkseg[0].Trkpt))
 
-	lineString, err := gpx.CreateLineString(parsed)
+	trackName := strings.Split(strings.ToLower(file.Name()), ".gpx")[0]
+	lineString, err := gpx.CreateLineString(trackName, parsed)
 
 	if err == nil {
 		/*
@@ -74,17 +76,20 @@ func main() {
 	}
 
 	var wg sync.WaitGroup
+	processedFiles := 0
 
 	for _, file := range files{
 		// read GPX
 		if(strings.HasSuffix(strings.ToLower(file.Name()), ".gpx")){
 			//fmt.Println(file.Name())
 			wg.Add(1)
+			processedFiles ++
 			go parseGpx(basePath, file, &wg);
 		}
 	}
 
 	wg.Wait()
 
-	fmt.Printf("import completed\n")
+	fmt.Printf("process completed\n")
+	fmt.Printf("converted and imported %d GPX tracks", processedFiles)
 }
