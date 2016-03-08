@@ -5,13 +5,13 @@ import (
 	"os"
 	"fmt"
 	"log"
+	"sync"
 	"strings"
 	"io/ioutil"
 
+	db "github.com/carlozamagni/geolab/storage"
 	gpx "github.com/carlozamagni/geolab/gpxToGeoJson"
 	//"encoding/json"
-	db "github.com/carlozamagni/geolab/storage"
-	"sync"
 )
 
 func parseGpx(basePath string, file os.FileInfo, wg *sync.WaitGroup) {
@@ -69,6 +69,7 @@ func checkParams()(string){
 func main() {
 
 	basePath := checkParams()
+	fmt.Printf("search for GPX tracks in %s", basePath)
 
 	files, err := ioutil.ReadDir(basePath)
 	if err != nil{
