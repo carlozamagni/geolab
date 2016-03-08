@@ -40,17 +40,10 @@ func parseGpx(basePath string, file os.FileInfo, wg *sync.WaitGroup) {
 		os.Exit(1)
 	}
 
-	//gpx.ConvertToGeoJson(parsed)
-	//fmt.Println(len(parsed.Trk.Trkseg[0].Trkpt))
-
 	trackName := strings.Split(strings.ToLower(file.Name()), ".gpx")[0]
 	lineString, err := gpx.CreateLineString(parsed)
 
 	if err == nil {
-		/*
-		lineStringAsJson, _ := json.Marshal(lineString)
-		fmt.Println(string(lineStringAsJson))
-		*/
 
 		geoTrack := GeoTrack{Name:trackName, Path:lineString}
 
