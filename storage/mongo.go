@@ -20,7 +20,7 @@ func loadConfiguration(env string) (config dbConfig, err error) {
 	case "local":
 		return dbConfig{
 			env:"local",
-			url:"mongodb://localhost:27017"},
+			url:"mongodb://127.0.0.1:27017/admin"},
 		nil
 
 	case "dev":

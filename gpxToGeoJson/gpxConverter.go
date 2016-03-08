@@ -5,6 +5,7 @@ import(
 	"encoding/xml"
 	"log"
 	"fmt"
+	geojson "github.com/carlozamagni/geolab/geojson"
 )
 
 
@@ -32,6 +33,31 @@ func ConvertToGeoJson(gpxStructure Gpx) (bool, error){
 	}
 
 	return true, nil
+}
+
+func CreateLineString(gpxStructure Gpx) (geojson.LineString, error){
+
+	resultingLine := geojson.LineString{Type:"LineString"}
+
+	segments := len(gpxStructure.Trk.Trkseg)
+	points := len(gpxStructure.Trk.Trkseg[0].Trkpt)
+
+	if(segments < 1 || points < 1){
+		return resultingLine, nil
+	}
+
+	for _, point := range gpxStructure.Trk.Trkseg[0].Trkpt{
+		//fmt.Printf("%f - %f \n", point.Lat, point.Lon)
+		//fmt.Print(i)
+
+		resultingLine.Coordinates = append(resultingLine.Coordinates, []float32{
+			point.Lon,
+			point.Lat,
+			point.Ele,
+		})
+	}
+
+	return resultingLine, nil
 }
 
 func ParseGpxFile(gpxData []byte) (Gpx, error) {

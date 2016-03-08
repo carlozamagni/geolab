@@ -24,11 +24,14 @@ altitude for coordinates in a projected coordinate reference system, or longitud
 latitude, altitude for coordinates in a geographic coordinate reference system).
 Any number of additional elements are allowed.
  */
+
+/*
 type LineString struct {
 	Type string 		`json:"type"`
 	Coordinates []struct {
-		Lon float64 	`json:"0"`
-		Lat float64 	`json:"1"`
+		Lon float32 	`json:"0"`
+		Lat float32 	`json:"1"`
+		Ele float32	`json:"2"`
 	} 			`json:"coordinates"`
 }
 
@@ -37,6 +40,7 @@ func NewLineString() *LineString{
 		Type: "LineString",
 	}
 }
+*/
 
 /*
 For type "MultiLineString", the "coordinates" member must be

@@ -9,9 +9,12 @@ import (
 	"io/ioutil"
 
 	gpx "github.com/carlozamagni/geolab/gpxToGeoJson"
+	//"encoding/json"
+	db "github.com/carlozamagni/geolab/storage"
+	"sync"
 )
 
-func parseGpx(basePath string, file os.FileInfo){
+func parseGpx(basePath string, file os.FileInfo, wg *sync.WaitGroup) {
 	fullFileName := strings.Join([]string{basePath, file.Name()}, "/")
 
 	if(! strings.HasSuffix(strings.ToLower(file.Name()), ".gpx")){
@@ -27,11 +30,25 @@ func parseGpx(basePath string, file os.FileInfo){
 	parsed, err := gpx.ParseGpxFile(f)
 	if err != nil {
 		log.Fatal(err)
+		os.Exit(1)
 	}
 
-	gpx.ConvertToGeoJson(parsed)
+	//gpx.ConvertToGeoJson(parsed)
+	//fmt.Println(len(parsed.Trk.Trkseg[0].Trkpt))
 
-	fmt.Println(len(parsed.Trk.Trkseg[0].Trkpt))
+	lineString, err := gpx.CreateLineString(parsed)
+
+	if err == nil {
+		/*
+		lineStringAsJson, _ := json.Marshal(lineString)
+		fmt.Println(string(lineStringAsJson))
+		*/
+		mongo := db.MongoSession("local")
+		geoDataCollection := mongo.DB("geolab").C("paths")
+		geoDataCollection.Insert(lineString)
+	}
+
+	wg.Done()
 }
 
 
@@ -56,13 +73,18 @@ func main() {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 	}
 
+	var wg sync.WaitGroup
+
 	for _, file := range files{
 		// read GPX
 		if(strings.HasSuffix(strings.ToLower(file.Name()), ".gpx")){
-			fmt.Println(file.Name())
-			go parseGpx(basePath, file);
+			//fmt.Println(file.Name())
+			wg.Add(1)
+			go parseGpx(basePath, file, &wg);
 		}
 	}
+
+	wg.Wait()
 
 	fmt.Printf("import completed\n")
 }
