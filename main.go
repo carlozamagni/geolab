@@ -5,6 +5,7 @@ import (
 	"os"
 	"fmt"
 	"log"
+	"time"
 	"sync"
 	"strings"
 	"io/ioutil"
@@ -70,7 +71,7 @@ func checkParams()(string){
 func main() {
 
 	basePath := checkParams()
-	fmt.Printf("search for GPX tracks in %s", basePath)
+	fmt.Printf("\n search for GPX tracks in %s \n", basePath)
 
 	files, err := ioutil.ReadDir(basePath)
 	if err != nil{
@@ -79,6 +80,8 @@ func main() {
 
 	var wg sync.WaitGroup
 	processedFiles := 0
+
+	startTime := time.Now()
 
 	for _, file := range files{
 		// read GPX
@@ -92,6 +95,10 @@ func main() {
 
 	wg.Wait()
 
-	fmt.Printf("process completed\n")
-	fmt.Printf("converted and imported %d GPX tracks", processedFiles)
+	endTime := time.Now()
+
+	fmt.Printf("process completed \n")
+	fmt.Printf("converted and imported %d GPX tracks \n", processedFiles)
+
+	fmt.Printf("execution time: %d sec.", (endTime.Sub(startTime) / 1000000000))
 }
