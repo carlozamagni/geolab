@@ -45,11 +45,16 @@ func parseGpx(basePath string, file os.FileInfo, wg *sync.WaitGroup) {
 
 	if err == nil {
 
-		geoTrack := GeoTrack{Name:trackName, Path:lineString}
+		if(len(lineString.Coordinates) == 0){
+			fmt.Printf("skipped %s. No coordinates \n", trackName)
+		}else {
+			geoTrack := GeoTrack{Name:trackName, Path:lineString}
 
-		mongo := db.MongoSession("local")
-		geoDataCollection := mongo.DB("geolab").C("paths")
-		geoDataCollection.Insert(geoTrack)
+			mongo := db.MongoSession("local")
+			geoDataCollection := mongo.DB("geolab").C("paths")
+			geoDataCollection.Insert(geoTrack)
+		}
+
 	}
 
 	wg.Done()
@@ -71,7 +76,9 @@ func checkParams()(string){
 func main() {
 
 	basePath := checkParams()
+
 	fmt.Printf("\n search for GPX tracks in %s \n", basePath)
+	fmt.Println("set index   {'path' : '2dsphere'}   on target collection")
 
 	files, err := ioutil.ReadDir(basePath)
 	if err != nil{
@@ -100,5 +107,5 @@ func main() {
 	fmt.Printf("process completed \n")
 	fmt.Printf("converted and imported %d GPX tracks \n", processedFiles)
 
-	fmt.Printf("execution time: %d sec.", (endTime.Sub(startTime) / 1000000000))
+	fmt.Printf("execution time: %s", endTime.Sub(startTime).String())
 }
