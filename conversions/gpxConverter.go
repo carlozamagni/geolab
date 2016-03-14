@@ -5,12 +5,13 @@ import(
 	"encoding/xml"
 	"log"
 	"fmt"
+	gpx "github.com/carlozamagni/geolab/gpx"
 	geojson "github.com/carlozamagni/geolab/geojson"
 )
 
 
 // maybe using this:  http://kpawlik.github.io/geojson/
-func ConvertToGeoJson(gpxStructure Gpx) (bool, error){
+func ConvertToGeoJson(gpxStructure gpx.Gpx) (bool, error){
 
 	segments := len(gpxStructure.Trk.Trkseg)
 	points := len(gpxStructure.Trk.Trkseg[0].Trkpt)
@@ -35,7 +36,7 @@ func ConvertToGeoJson(gpxStructure Gpx) (bool, error){
 	return true, nil
 }
 
-func CreateLineString(gpxStructure Gpx) (geojson.LineString, error){
+func CreateLineString(gpxStructure gpx.Gpx) (geojson.LineString, error){
 
 	resultingLine := geojson.LineString{Type:"LineString"}
 
@@ -60,11 +61,11 @@ func CreateLineString(gpxStructure Gpx) (geojson.LineString, error){
 	return resultingLine, nil
 }
 
-func ParseGpxFile(gpxData []byte) (Gpx, error) {
+func ParseGpxFile(gpxData []byte) (gpx.Gpx, error) {
 	// parsing xml:
 	// https://www.socketloop.com/tutorials/golang-xml-to-json-example
 	// https://github.com/revh/gpxjson/blob/master/gpxjson.go
-	var g Gpx
+	var g gpx.Gpx
 	err := xml.Unmarshal(gpxData, &g)
 
 	if err != nil{

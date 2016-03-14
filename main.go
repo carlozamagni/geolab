@@ -12,7 +12,7 @@ import (
 
 	db "github.com/carlozamagni/geolab/storage"
 	geojson "github.com/carlozamagni/geolab/geojson"
-	gpx "github.com/carlozamagni/geolab/gpxToGeoJson"
+	geoConverters "github.com/carlozamagni/geolab/conversions"
 )
 
 type GeoTrack struct{
@@ -34,14 +34,14 @@ func parseGpx(basePath string, file os.FileInfo, wg *sync.WaitGroup) {
 		os.Exit(1)
 	}
 
-	parsed, err := gpx.ParseGpxFile(f)
+	parsed, err := geoConverters.ParseGpxFile(f)
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)
 	}
 
 	trackName := strings.Split(strings.ToLower(file.Name()), ".gpx")[0]
-	lineString, err := gpx.CreateLineString(parsed)
+	lineString, err := geoConverters.CreateLineString(parsed)
 
 	if err == nil {
 
