@@ -1,28 +1,26 @@
 package gpxToGeoJson
 
-
-import(
+import (
 	"encoding/xml"
-	"log"
 	"fmt"
-	gpx "github.com/carlozamagni/geolab/gpx"
 	geojson "github.com/carlozamagni/geolab/geojson"
+	gpx "github.com/carlozamagni/geolab/gpx"
+	"log"
 )
 
-
 // maybe using this:  http://kpawlik.github.io/geojson/
-func ConvertToGeoJson(gpxStructure gpx.Gpx) (bool, error){
+func ConvertToGeoJson(gpxStructure gpx.Gpx) (bool, error) {
 
 	segments := len(gpxStructure.Trk.Trkseg)
 	points := len(gpxStructure.Trk.Trkseg[0].Trkpt)
 
-	if(segments < 1 || points < 1){
+	if segments < 1 || points < 1 {
 		return true, nil
 	}
 
 	var coordinates [][3]float32
 
-	for i, point := range gpxStructure.Trk.Trkseg[0].Trkpt{
+	for i, point := range gpxStructure.Trk.Trkseg[0].Trkpt {
 		//fmt.Printf("%f - %f \n", point.Lat, point.Lon)
 		fmt.Print(i)
 
@@ -36,18 +34,18 @@ func ConvertToGeoJson(gpxStructure gpx.Gpx) (bool, error){
 	return true, nil
 }
 
-func CreateLineString(gpxStructure gpx.Gpx) (geojson.LineString, error){
+func CreateLineString(gpxStructure gpx.Gpx) (geojson.LineString, error) {
 
-	resultingLine := geojson.LineString{Type:"LineString"}
+	resultingLine := geojson.LineString{Type: "LineString"}
 
 	segments := len(gpxStructure.Trk.Trkseg)
 	points := len(gpxStructure.Trk.Trkseg[0].Trkpt)
 
-	if(segments < 1 || points < 1){
+	if segments < 1 || points < 1 {
 		return resultingLine, nil
 	}
 
-	for _, point := range gpxStructure.Trk.Trkseg[0].Trkpt{
+	for _, point := range gpxStructure.Trk.Trkseg[0].Trkpt {
 		//fmt.Printf("%f - %f \n", point.Lat, point.Lon)
 		//fmt.Print(i)
 
@@ -68,12 +66,13 @@ func ParseGpxFile(gpxData []byte) (gpx.Gpx, error) {
 	var g gpx.Gpx
 	err := xml.Unmarshal(gpxData, &g)
 
-	if err != nil{
+	if err != nil {
 		log.Fatal(err)
 	}
 
 	return g, err
 }
+
 /*
 <?xml version='1.0' encoding='UTF-8'?>
 <gpx xmlns:gpxdata="http://www.cluetrust.com/XML/GPXDATA/1/0" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:gpxext="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns="http://www.topografix.com/GPX/1/1" creator="tapiriik-sync">

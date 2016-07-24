@@ -1,16 +1,15 @@
 package geojson
 
-
 /*
 Point coordinates are in x, y order (easting, northing for projected coordinates,
 longitude, latitude for geographic coordinates)
- */
+*/
 type Point struct {
-	Type string 		`json:"type"`
-	Coordinates []float64	`json:"coordinates"`
+	Type        string    `json:"type"`
+	Coordinates []float64 `json:"coordinates"`
 }
 
-func NewPoint() *Point{
+func NewPoint() *Point {
 	return &Point{
 		Type: "Point",
 	}
@@ -23,7 +22,7 @@ and may be more. The order of elements must follow x, y, z order (easting, north
 altitude for coordinates in a projected coordinate reference system, or longitude,
 latitude, altitude for coordinates in a geographic coordinate reference system).
 Any number of additional elements are allowed.
- */
+*/
 
 /*
 type LineString struct {
@@ -45,16 +44,16 @@ func NewLineString() *LineString{
 /*
 For type "MultiLineString", the "coordinates" member must be
 an array of LineString coordinate arrays.
- */
+*/
 type MultiLineString struct {
-	Type string 		`json:"type"`
+	Type        string `json:"type"`
 	Coordinates []struct {
-		Lon []float64	`json:"0"`
-		Lat []float64	`json:"1"`
-	} 			`json:"coordinates"`
+		Lon []float64 `json:"0"`
+		Lat []float64 `json:"1"`
+	} `json:"coordinates"`
 }
 
-func NewMultiLineString() *MultiLineString{
+func NewMultiLineString() *MultiLineString {
 	return &MultiLineString{
 		Type: "MultiLineString",
 	}
