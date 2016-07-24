@@ -2,6 +2,7 @@ package geojson
 
 import (
 	"fmt"
+	"log"
 	"bytes"
 )
 
@@ -21,7 +22,10 @@ func ToString(ls LineString) string{
 
 	for _, p := range ls.Coordinates{
 		pointString := fmt.Sprintf("[%g,%g,%g]", p[0], p[1], p[2])
-		buffer.WriteString(pointString)
+		_, err := buffer.WriteString(pointString)
+		if(err != nil){
+			log.Fatal(err)
+		}
 	}
 
 	return fmt.Sprintf("{ 'type':%s, 'coordinates':[%s] ", ls.Type, buffer.String())
